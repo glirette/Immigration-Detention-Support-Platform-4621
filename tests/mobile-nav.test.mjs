@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
-const script = readFileSync(resolve(import.meta.dirname, '..', 'script.js'), 'utf8');
+const script = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '..', 'script.js'), 'utf8');
 
 test('mobile navigation state, Escape focus and link dismissal', () => {
   const attrs = {};
