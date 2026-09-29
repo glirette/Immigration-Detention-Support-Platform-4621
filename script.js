@@ -3,17 +3,25 @@ const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileNav = document.getElementById('mobileNav');
 const menuIcon = mobileMenuBtn.querySelector('i');
 
-mobileMenuBtn.addEventListener('click', () => {
-  mobileNav.classList.toggle('active');
-  
-  // Toggle icon
-  if (mobileNav.classList.contains('active')) {
+function setMobileMenu(open) {
+  mobileNav.classList.toggle('active', open);
+  mobileMenuBtn.setAttribute('aria-expanded', String(open));
+  mobileMenuBtn.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  if (open) {
     menuIcon.classList.remove('fa-bars');
     menuIcon.classList.add('fa-times');
   } else {
     menuIcon.classList.remove('fa-times');
     menuIcon.classList.add('fa-bars');
   }
+}
+
+mobileMenuBtn.addEventListener('click', () => {
+  setMobileMenu(!mobileNav.classList.contains('active'));
+});
+
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => setMobileMenu(false));
 });
 
 // Smooth scrolling for navigation links
@@ -28,9 +36,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       });
       
       // Close mobile menu if open
-      mobileNav.classList.remove('active');
-      menuIcon.classList.remove('fa-times');
-      menuIcon.classList.add('fa-bars');
+      setMobileMenu(false);
     }
   });
 });
@@ -88,9 +94,8 @@ document.querySelectorAll('form').forEach(form => {
 // Keyboard navigation support
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-    mobileNav.classList.remove('active');
-    menuIcon.classList.remove('fa-times');
-    menuIcon.classList.add('fa-bars');
+    setMobileMenu(false);
+    mobileMenuBtn.focus();
   }
 });
 
